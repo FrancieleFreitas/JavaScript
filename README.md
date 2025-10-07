@@ -1,5 +1,5 @@
-## Disciplina: JavaScript
-**Nome:** Franciele Cristina Dos Santos Freitas
-**Cidade:** Bom Despacho-MG
+## Disciplina: Javascript
+**Projeto Desenvolve - Bom Despacho**
+
 
 **Matrícula:** PDBD199
