@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buscar Usuários do GitHub</title>
+<style>
+  body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: linear-gradient(135deg, #87cefa, #dda0dd);
+    text-align: center;
+    padding: 50px;
+  }
+  h1 {
+    color: #333;
+    text-shadow: 1px 1px #fff;
+  }
+  input {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    width: 230px;
+    font-size: 16px;
+  }
+  button {
+    background: #8a2be2;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #6a0dad;
+    transform: scale(1.05);
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+  }
+  li {
+    background: rgba(255,255,255,0.8);
+    margin: 8px auto;
+    padding: 10px;
+    border-radius: 12px;
+    width: 300px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+  <h1>🔍 Buscar Usuários do GitHub</h1>
+  <!-- Campo de busca -->
+  <input type="text" id="busca" placeholder="Digite um nome de usuário">
+  <!-- Botão de busca -->
+  <button onclick="buscarUsuarios()">Buscar</button>
+
+  <!-- Lista de resultados -->
+  <ul id="lista"></ul>
+
+<script>
+  // Função para buscar usuários na API do GitHub
+  async function buscarUsuarios() {
+    const termo = document.getElementById("busca").value.trim();
+    const lista = document.getElementById("lista");
+    lista.innerHTML = ""; // limpa resultados anteriores
+
+    if (termo === "") return; // ignora se o campo estiver vazio
+
+    try {
+      // Faz a busca na API do GitHub
+      const resposta = await fetch(`https://api.github.com/search/users?q=${termo}`);
+      const dados = await resposta.json();
+
+      // Verifica se encontrou resultados
+      if (dados.items && dados.items.length > 0) {
+        dados.items.forEach(usuario => {
+          const item = document.createElement("li");
+          // Mostra login e link do perfil
+          item.innerHTML = `<strong>${usuario.login}</strong><br>
+                            <a href="${usuario.html_url}" target="_blank">Ver perfil</a>`;
+          lista.appendChild(item);
+        });
+      } else {
+        // Nenhum resultado encontrado
+        const item = document.createElement("li");
+        item.textContent = "Não foram encontrados usuários para esta pesquisa";
+        lista.appendChild(item);
+      }
+    } catch (erro) {
+      // Caso a API falhe
+      const item = document.createElement("li");
+      item.textContent = "Erro ao buscar usuários 😢";
+      lista.appendChild(item);
+    }
+  }
+</script>
+
+</body>
+</html>
