@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quem Curtiu?</title>
+<style>
+  body {
+    font-family: 'Trebuchet MS', sans-serif;
+    background: linear-gradient(135deg, #ffb6c1, #87cefa);
+    text-align: center;
+    padding: 50px;
+  }
+  h1 {
+    color: #333;
+    text-shadow: 1px 1px #fff;
+  }
+  input {
+    padding: 10px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    width: 200px;
+    font-size: 16px;
+  }
+  button {
+    background: #ff69b4;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 10px 5px;
+    transition: 0.3s;
+  }
+  button:hover {
+    background: #ff1493;
+    transform: scale(1.05);
+  }
+  #resultado {
+    margin-top: 30px;
+    font-size: 18px;
+    color: #222;
+    background: rgba(255,255,255,0.7);
+    display: inline-block;
+    padding: 15px 25px;
+    border-radius: 12px;
+  }
+</style>
+</head>
+<body>
+
+  <h1>💖 Quem Curtiu?</h1>
+  <!-- Campo de texto -->
+  <input type="text" id="nome" placeholder="Digite seu nome">
+  <!-- Botões -->
+  <button onclick="curtir()">Curtir</button>
+  <button onclick="limpar()">Limpar</button>
+
+  <!-- Resultado -->
+  <p id="resultado">Ninguém curtiu</p>
+
+<script>
+  // Recupera curtidas do localStorage ou cria um array vazio
+  let curtidas = JSON.parse(localStorage.getItem("curtidas")) || [];
+
+  // Atualiza o texto na tela
+  function atualizarTexto() {
+    let texto = "";
+    if (curtidas.length === 0) {
+      texto = "Ninguém curtiu";
+    } else if (curtidas.length === 1) {
+      texto = `${curtidas[0]} curtiu`;
+    } else if (curtidas.length === 2) {
+      texto = `${curtidas[0]} e ${curtidas[1]} curtiram`;
+    } else {
+      texto = `${curtidas[0]}, ${curtidas[1]} e mais ${curtidas.length - 2} pessoas curtiram`;
+    }
+    document.getElementById("resultado").textContent = texto;
+  }
+
+  // Função Curtir
+  function curtir() {
+    const nome = document.getElementById("nome").value.trim();
+    if (nome === "") return; // ignora vazio
+    curtidas.push(nome); // adiciona nome
+    localStorage.setItem("curtidas", JSON.stringify(curtidas)); // salva no localStorage
+    document.getElementById("nome").value = ""; // limpa o campo
+    atualizarTexto(); // mostra na tela
+  }
+
+  // Função Limpar
+  function limpar() {
+    localStorage.removeItem("curtidas"); // apaga do localStorage
+    curtidas = []; // limpa array
+    atualizarTexto(); // atualiza texto
+  }
+
+  // Atualiza o texto ao abrir a página
+  atualizarTexto();
+</script>
+
+</body>
+</html>
